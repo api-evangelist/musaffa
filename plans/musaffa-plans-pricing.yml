@@ -1,0 +1,72 @@
+generated: '2026-08-26'
+method: searched
+source: https://musaffa.com/for-business/
+docs: https://musaffa.com/for-business/
+plan_count: 4
+currency: null
+pricing_model: contact-sales
+summary: >-
+  Musaffa publishes the SHAPE of its B2B API packages — market access, feature set and monthly call
+  quota — but publishes NO price for any of them. Every tier routes to "Request a demo" or "Schedule
+  a call". The prices on https://musaffa.com/pricing/ are for the consumer halal-investing product,
+  not for API access.
+plans:
+- name: Starter
+  price: null
+  currency: null
+  period: null
+  price_disclosure: contact-sales
+  quota:
+    api_calls_per_month: 10000
+  limits:
+    markets: 1
+    markets_note: Any ONE global market of choice, excluding US, UK and Canada.
+  features:
+  - Shariah compliance rankings for all halal stocks based on Musaffa's proprietary methodology
+  - Webhook notification on compliance status changes
+- name: Pro
+  price: null
+  currency: null
+  period: null
+  price_disclosure: contact-sales
+  quota:
+    api_calls_per_month: 100000
+  limits:
+    markets: 3
+    markets_note: Any THREE global markets of choice.
+  features:
+  - Detailed compliance screening results for all stocks
+  - Shariah compliance rankings for all halal stocks
+- name: Premium
+  price: null
+  currency: null
+  period: null
+  price_disclosure: contact-sales
+  quota:
+    api_calls_per_month: unlimited
+  limits:
+    markets: all
+    markets_note: Access to ALL covered markets and exchanges.
+  features:
+  - Detailed compliance screening results for all stocks
+  - Shariah compliance rankings for all halal stocks
+  - Zakat calculator
+  - Purification calculator
+- name: Custom
+  price: null
+  currency: null
+  period: null
+  price_disclosure: contact-sales
+  quota: {}
+  limits: {}
+  features:
+  - Everything in Premium plus a tailored solution built for the customer's team
+coverage_claims:
+  securities: 120000
+  securities_note: 120,000+ covered stocks and ETFs
+  exchanges: 70
+  exchanges_note: 70+ global exchanges
+  source: https://musaffa.com/for-business/
+sales_contact:
+  email: info@musaffa.com
+  demo_url: https://musaffa.com/for-business/

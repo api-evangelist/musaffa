@@ -1,0 +1,97 @@
+generated: '2026-08-26'
+method: searched
+source: https://api.musaffa.com/
+docs:
+- https://api.musaffa.com/
+- https://musaffa.com/screening-methodology/
+- https://musaffa.com/for-business/
+summary: >-
+  Musaffa asserts no cross-cutting web-API standards (no OAuth2, no OIDC, no RFC 9457, no JSON:API,
+  no OData). What it DOES declare, inside the contract itself, is the domain standard for its market:
+  AAOIFI Shariah screening. The API's own response-field documentation states the AAOIFI thresholds
+  as the rule the returned status values are computed from.
+conformance:
+- id: oauth2
+  conforms: false
+  evidence: >-
+    Authentication is a per-request Base64(SHA-512(secretKey + time + body)) signature with a clientId
+    header. No authorization server, no token endpoint, no scopes.
+    https://api.musaffa.com/ "Authentication and API"
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returns 404 on musaffa.com (probed 2026-08-26).
+- id: rfc9457
+  conforms: false
+  evidence: >-
+    No application/problem+json media type and no error envelope schema anywhere in the reference;
+    errors are an HTTP status-code table only. https://api.musaffa.com/#errors
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: https://musaffa.com/.well-known/security.txt returned 404 (probed 2026-08-26).
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: >-
+    Three API versions are published concurrently (v1, v2, v3) with no Deprecation or Sunset header,
+    and no deprecation policy in the docs.
+- id: pagination
+  conforms: false
+  evidence: >-
+    No limit/offset/cursor/page parameter on any collection response; POST /stocks/list returns an
+    unbounded array. https://api.musaffa.com/
+- id: idempotency
+  conforms: na
+  evidence: Read-only API — no write surface for an idempotency key to protect.
+- id: webhooks-signed-delivery
+  conforms: true
+  evidence: >-
+    Outbound webhook deliveries carry the same token/clientId/time signature headers as inbound
+    requests, so a receiver can verify authenticity by recomputing the SHA-512 digest.
+    https://api.musaffa.com/#webhook
+domain_standards:
+- id: aaoifi-shariah-screening
+  name: AAOIFI Shariah screening methodology
+  body: Accounting and Auditing Organization for Islamic Financial Institutions
+  conforms: true
+  declared_in: contract
+  evidence: >-
+    The API reference states the thresholds as the definition of its own returned fields, three times:
+    (1) revenueBreakdown.status — "Combined revenue from DOUBTFUL and NOT HALAL sources must be less
+    than 5% of total revenue to be Shariah compliant based on AAOIFI stock screening methodology";
+    (2) interestBearingSecuritiesAndAssets — "should be less than 30% of Trailing 36-month Average
+    Market Capitalization ... based on AAOIFI stock screening methodology"; (3) interestBearingDebt —
+    "should be less than 30% of Trailing 36-Month Average Market Capitalization ... based on AAOIFI
+    stock screening methodology".
+  spec_location: >-
+    https://api.musaffa.com/ — "Stock response data structure (JSON)" and "Stock bulk response data
+    structure (JSON array)" field tables.
+  thresholds:
+    non_permissible_revenue_ratio_max_pct: 5
+    interest_bearing_securities_to_36m_avg_mktcap_max_pct: 30
+    interest_bearing_debt_to_36m_avg_mktcap_max_pct: 30
+  corroboration: >-
+    https://musaffa.com/screening-methodology/ restates the same three thresholds and names the
+    Shariah supervisory input — Shaikh Dr. Aznan Hasan (AAOIFI Shariah Board member) and Mufti Faraz
+    Adam of Amanah Advisors, with Amanah Advisors as independent certifier.
+  note: >-
+    This is a genuine domain-standard signature: a consumer who already computes AAOIFI screens can
+    consume Musaffa's status and ratio fields with no bespoke mapping, because the field semantics
+    ARE the AAOIFI thresholds. It is declared in the contract's own field documentation, not only on
+    a marketing page.
+- id: iso-8601-dates
+  conforms: true
+  evidence: >-
+    lastUpdate and reportDate are documented as "ISO 8601 Date/Time Format (YYYY-MM-DD)".
+    https://api.musaffa.com/
+certifications:
+  published: false
+  note: >-
+    No SOC 2, ISO 27001, PCI DSS or similar information-security certification is published anywhere
+    on musaffa.com. The only third-party attestation is Shariah certification by Amanah Advisors,
+    which is a religious-compliance certification of the screening methodology, not a security or
+    privacy audit of the platform. No Compliance pointer is emitted on that basis.
+regulatory:
+  note: >-
+    Musaffa Financial LLC publishes a Form ADV Part 2A and a Wrap Fee Program Brochure at
+    https://musaffa.com/assets/Form-ADV-Part-2A.pdf, indicating SEC-registered investment-adviser
+    status for the US managed-investing product. That regime attaches to the advisory business, not
+    to the B2B screening API.

@@ -1,0 +1,65 @@
+generated: '2026-08-26'
+method: searched
+source: https://api.musaffa.com/
+docs: https://api.musaffa.com/
+format: none
+format_note: >-
+  Musaffa does NOT use RFC 9457 application/problem+json. The API reference publishes a plain HTTP
+  status-code table with human-readable meanings and shows error responses as JSON, but no error
+  envelope schema (no code/type/title/detail field names) is documented anywhere. A consumer can
+  branch on the HTTP status; it cannot parse a stable machine-readable error body.
+envelope:
+  documented: false
+  fields: []
+error_count: 9
+errors:
+- status: 400
+  title: Bad Request
+  meaning: Your request is invalid.
+  remediation: >-
+    Also returned as "Time expired" when the signed `time` header is more than 5 seconds old —
+    regenerate the token against a fresh UTC timestamp and retry.
+- status: 401
+  title: Unauthorized
+  meaning: The access token is invalid or has been revoked.
+  remediation: Recompute Base64(SHA-512(secretKey + time + body)); confirm clientId and secretKey.
+- status: 403
+  title: Forbidden
+  meaning: The stock requested is hidden for administrators only.
+  remediation: Not retryable; the security is not exposed on your plan.
+- status: 404
+  title: Not Found
+  meaning: The specified stock could not be found.
+  remediation: Verify the ticker symbol and that the market is covered by your package.
+- status: 405
+  title: Method Not Allowed
+  meaning: You tried to access a stock with an invalid method.
+  remediation: Screening endpoints are POST; related-stocks is GET.
+- status: 406
+  title: Not Acceptable
+  meaning: You requested a format that isn't json.
+  remediation: Send Content-Type application/json.
+- status: 429
+  title: Too Many Requests
+  meaning: You're requesting too many stocks! Slow down!
+  remediation: >-
+    Back off to the documented 1 request/second ceiling. No Retry-After or RateLimit-* header is
+    published, so an agent must apply its own backoff rather than read a reset time.
+- status: 500
+  title: Internal Server Error
+  meaning: We had a problem with our server. Try again later.
+  remediation: Retryable with backoff.
+- status: 503
+  title: Service Unavailable
+  meaning: We're temporarily offline for maintenance. Please try again later.
+  remediation: Retryable with backoff; no status page is published to check against.
+domain_status_values:
+  note: >-
+    Distinct from HTTP errors, screening responses carry domain status enums that a consumer must
+    branch on.
+  shariahComplianceStatus: [COMPLIANT, NON_COMPLIANT, QUESTIONABLE, NOT_COVERED]
+  ratio_status: [Pass, Fail, NOT_UNDER_COVERAGE, NOT_COVERED]
+  note_2: >-
+    The prose describes the status vocabulary as "Halal, Not Halal, Doubtful, Not Covered" while the
+    worked response examples return COMPLIANT / NON_COMPLIANT / QUESTIONABLE. Both spellings appear
+    in the same document; the example payloads are the authoritative wire values.

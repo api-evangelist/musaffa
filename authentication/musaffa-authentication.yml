@@ -1,0 +1,55 @@
+generated: '2026-08-26'
+method: searched
+source: https://api.musaffa.com/
+docs: https://api.musaffa.com/
+name: Musaffa B2B API authentication
+summary: >-
+  Musaffa does not use OAuth, OpenID Connect or a bearer API key. Each B2B client is issued a
+  clientId and a secretKey out of band (there is no self-service key issuance), and every request
+  carries a per-request signature computed over the secret, a UTC timestamp and the exact request
+  body. The scheme is a custom HMAC-style request signature, not a static credential.
+schemes:
+- id: musaffa-signed-request
+  kind: custom-signature
+  in: header
+  standard: none
+  headers:
+  - name: clientId
+    description: Client identifier issued by Musaffa, shared separately with each B2B client.
+    required: true
+  - name: token
+    description: >-
+      Base64(SHA-512(secretKey + time + jsonStringBody)). For the GET /stocks/related/{symbol}
+      operation the stock symbol is signed in place of a JSON body.
+    required: true
+  - name: time
+    description: >-
+      Request timestamp formatted yyyyMMddHHmmss. The docs state TimeZone = "UTC" but the worked
+      Java example uses ZoneId.of("UTC+5"); the docs are internally inconsistent on this point.
+    required: true
+  - name: Content-Type
+    description: application/json
+    required: true
+  signature:
+    algorithm: SHA-512
+    encoding: base64
+    canonical_string: secretKey + time + jsonStringBody
+    replay_window_seconds: 5
+    replay_window_source: >-
+      Errors section — "Gives a 'Time expired' error if the token time exceeds 5 seconds" (HTTP 400).
+credential_issuance:
+  self_service: false
+  method: sales
+  note: >-
+    "Musaffa will provide a secret key and a client ID to every B2B client" — credentials are issued
+    through the demo / schedule-a-call flow on https://musaffa.com/for-business/. There is no
+    developer signup that yields API credentials.
+oauth2: false
+openid_connect: false
+mutual_tls: false
+scopes: none
+notes:
+- The same clientId/token/time header triple is used in BOTH directions — Musaffa signs its outbound
+  webhook deliveries with the identical scheme, so a consumer can verify inbound webhooks by
+  recomputing Base64(SHA-512(secretKey + time + body)).
+- Published example credential values in the docs are placeholders, not live keys.

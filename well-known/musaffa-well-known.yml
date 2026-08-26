@@ -1,0 +1,53 @@
+generated: '2026-08-26'
+method: probed
+source: probed 2026-08-26 against every host in apis.yml
+hit_count: 0
+summary: >-
+  Every /.well-known/ path was probed on all three Musaffa hosts. Nothing was served. No document was
+  saved and NO WellKnown or SecurityTxt pointer is emitted — this file records a measured absence.
+hosts:
+- host: https://musaffa.com
+  soft_404_control:
+    path: /__nonexistent_control_12345
+    status: 404
+    note: >-
+      This host returns a real 404 for unknown paths, so the 404s below are trustworthy negatives
+      rather than a catch-all masking a hit.
+  documents:
+  - {path: /.well-known/security.txt, status: 404, file: null}
+  - {path: /.well-known/openid-configuration, status: 404, file: null, note: '301 to trailing-slash form, then 404'}
+  - {path: /.well-known/oauth-authorization-server, status: 404, file: null, note: '301 to trailing-slash form, then 404'}
+  - {path: /.well-known/oauth-protected-resource, status: 404, file: null, note: '301 to trailing-slash form, then 404'}
+  - {path: /.well-known/api-catalog, status: 404, file: null, note: '301 to trailing-slash form, then 404'}
+  - {path: /.well-known/ai-plugin.json, status: 404, file: null}
+  - {path: /.well-known/agent-card.json, status: 404, file: null}
+  - {path: /.well-known/agent.json, status: 404, file: null}
+- host: https://api.musaffa.com
+  soft_404_control:
+    path: /__nonexistent_control_12345
+    status: 200
+    bytes: 179106
+    note: >-
+      CATCH-ALL. This host answers 200 with the same 179KB Slate documentation shell for EVERY path,
+      including /openapi.json, /swagger.json, /api-docs and /redoc. Any 200 on this host is therefore
+      meaningless and no probe result from it is counted as a document. The only real pages are the
+      version-selected doc sets /v1/, /v2/ and /v3/, which return distinct bodies.
+  documents:
+  - {path: /.well-known/security.txt, status: 200, file: null, note: 'catch-all HTML shell, not a document'}
+  - {path: /.well-known/api-catalog, status: 200, file: null, note: 'catch-all HTML shell, not a document'}
+- host: https://platform.musaffa.com
+  soft_404_control:
+    path: /__nonexistent_control_12345
+    status: 200
+    bytes: 937948
+    note: >-
+      CATCH-ALL. Next.js SPA that answers with the same 938KB HTML shell for every path, including
+      the documented API paths themselves (e.g. /b2b/api/v1/musaffa/stocks/related/AAPL). No
+      /.well-known probe on this host can produce a trustworthy result.
+  documents: []
+agent_card:
+  found: false
+  note: >-
+    Both the canonical /.well-known/agent-card.json and the legacy /.well-known/agent.json returned
+    404 on musaffa.com, the only host with a trustworthy 404. No a2a/ artifact is written and no
+    AgentCard pointer is emitted.

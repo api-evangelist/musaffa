@@ -1,0 +1,57 @@
+generated: '2026-08-26'
+method: searched
+source: https://api.musaffa.com/
+docs: https://api.musaffa.com/
+asyncapi_spec_published: false
+asyncapi_note: >-
+  Musaffa publishes no AsyncAPI document. It does publish a real, documented outbound webhook, which
+  is captured below as a webhook catalog (type Webhooks). Nothing here is generated — every field is
+  taken from the "Webhook" section of the API reference.
+delivery:
+  direction: outbound
+  transport: HTTPS
+  method: POST
+  content_type: application/json
+  subscriber_url: client-supplied
+  registration: >-
+    "You provide us your webhook URL." Registration is manual, arranged with Musaffa — there is no
+    self-service webhook management endpoint, no list/create/delete API, and no way to enumerate or
+    rotate subscriptions programmatically.
+  signature:
+    headers: [token, clientId, time]
+    algorithm: Base64(SHA-512(secretKey + time + body))
+    note: Same signing scheme as inbound API requests, so deliveries are verifiable by the receiver.
+  retries:
+    documented: false
+  ordering:
+    documented: false
+  replay:
+    documented: false
+event_count: 1
+events:
+- name: compliance-status-update
+  summary: >-
+    A stock's Shariah-compliance data changed. "All stock data updates will be sent through webhook
+    instantly."
+  trigger: Change to a covered security's screening result.
+  payload_fields:
+  - {name: companyName, type: string, description: Company name}
+  - {name: stockName, type: string, description: Stock symbol}
+  - {name: lastUpdate, type: string, description: ISO 8601 timestamp of the update}
+  - {name: shariahComplianceStatus, type: string, description: 'COMPLIANT | NON_COMPLIANT | QUESTIONABLE | NOT_COVERED'}
+  - {name: complianceRanking, type: number, description: Compliance rank 0-5}
+  - {name: revenueBreakdown, type: object, description: '{notHalal, doubtful, halal, status} — AAOIFI 5% non-permissible-revenue screen'}
+  - {name: interestBearingSecuritiesAndAssets, type: object, description: '{interestRatio, status} — AAOIFI 30% screen'}
+  - {name: interestBearingDebt, type: object, description: '{debtRatio, status} — AAOIFI 30% screen'}
+  - {name: source, type: string, description: Reporting date of the company}
+  example_published: true
+  example_source: https://api.musaffa.com/#webhook
+availability:
+  note: >-
+    Webhook notification on compliance status changes is listed as a feature of the Starter package
+    and above at https://musaffa.com/for-business/, i.e. it is available on every published tier.
+gaps:
+- No event type/name field in the payload — a receiver cannot distinguish event kinds; there is only one.
+- No delivery id, no idempotency key, no sequence number, so duplicate deliveries are indistinguishable.
+- No documented retry, backoff or dead-letter behaviour.
+- No subscription-management API.

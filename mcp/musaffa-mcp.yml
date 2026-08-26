@@ -1,0 +1,58 @@
+generated: '2026-08-26'
+method: derived
+source: >-
+  Derived from the operations published in the Musaffa B2B API reference
+  (https://api.musaffa.com/) after searching for a first-party MCP server and finding none.
+status: candidate
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: searched
+  note: >-
+    Musaffa ships NO MCP server — neither a hosted remote endpoint nor a stdio package. Searched the
+    web, the npm and PyPI registries, the API reference and musaffa.com; nothing exists. No endpoint
+    URL is guessed here. The tools below are a CANDIDATE surface derived from the documented REST
+    operations to show what an MCP server over this API would expose; they are not callable today and
+    no MCPServer pointer is emitted in apis.yml.
+search_evidence:
+- {query: 'Musaffa MCP server model context protocol', result: 'no first-party server; the only halal-investing MCP server found belongs to Halal Terminal, a different company'}
+- {registry: npm, query: musaffa, results: 0}
+- {registry: pypi, query: musaffa, status: 404}
+candidate_tools:
+- name: list_screened_stocks
+  description: List Shariah-screened stocks for a country and sector, with compliance status and 0-5 ranking.
+  backing_operation: POST https://platform.musaffa.com/b2b/api/v1/musaffa/stocks/list
+  input_fields: [country, sector]
+  consequence: read-only
+- name: get_screening_report
+  description: >-
+    Full AAOIFI screening report for one ticker — compliance status and ranking, revenue breakdown,
+    interest-bearing securities and debt ratios, filing metadata and detailed line items.
+  backing_operation: POST https://platform.musaffa.com/b2b/api/v3/musaffa/stocks/report
+  input_fields: [stock]
+  consequence: read-only
+- name: get_screening_reports_bulk
+  description: Summary screening results for up to 100 tickers in one call.
+  backing_operation: POST https://platform.musaffa.com/b2b/api/v2/musaffa/stocks/screening-list
+  input_fields: [stocks]
+  constraints: maximum 100 symbols per request
+  consequence: read-only
+- name: get_dividend_purification
+  description: Dividend purification amount per share for a ticker's latest quarterly dividend.
+  backing_operation: POST https://platform.musaffa.com/b2b/api/v2/musaffa/stocks/dividends/pure
+  input_fields: [stock]
+  consequence: read-only
+- name: get_related_stocks
+  description: Peer securities by market, industry and sector, each with compliance status and ranking.
+  backing_operation: GET https://platform.musaffa.com/b2b/api/v1/musaffa/stocks/related/{symbol}
+  input_fields: [symbol]
+  consequence: read-only
+agent_notes:
+- Every candidate tool is read-only; there is no write surface and therefore no escalation or approval step needed.
+- >-
+    An MCP server over this API would have to hold the client secret and compute
+    Base64(SHA-512(secretKey + time + body)) per call, with a 5-second clock-skew window. That
+    signing requirement, not the REST surface, is the real work in building one.

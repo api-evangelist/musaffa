@@ -1,23 +1,114 @@
 aid: musaffa
 name: Musaffa
-description: 'Musaffa is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  Musaffa is a New York-headquartered Islamic fintech that operates a halal investing platform and
+  sells its underlying Shariah-compliance dataset to other businesses as the Musaffa B2B API. The
+  company screens 120,000+ stocks and ETFs across 70+ global exchanges against an AAOIFI-based
+  methodology and exposes the results — compliance status, a 0-5 compliance ranking, revenue
+  breakdown, interest-bearing securities and debt ratios, dividend purification amounts and related
+  securities — through a versioned REST API at platform.musaffa.com, plus an outbound webhook that
+  pushes compliance-status changes to a subscriber URL. The B2B API is documented publicly at
+  api.musaffa.com (v1, v2 and the current v3) but the API itself is sold through a demo/sales
+  process: credentials are a client ID plus a shared secret issued per client, and there is no
+  self-service signup for the API.
 url: https://raw.githubusercontent.com/api-evangelist/musaffa/refs/heads/main/apis.yml
+image: https://musaffa.com/assets/images/header/musaffa-logo-black.webp
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-26'
 modified: '2026-08-26'
 tags:
+- Islamic Finance
+- Shariah Compliance
+- Halal Investing
+- Stock Screening
+- Financial Data
+- ETFs
+- Market Data
+- Fintech
+- Investing
+- Compliance
+- Zakat
 - Company
-apis: []
+apis:
+- name: Musaffa B2B Shariah Compliance API
+  description: >-
+    REST API returning Shariah-compliance screening for stocks and ETFs — a compliance status and
+    0-5 ranking per ticker, a full screening report with revenue breakdown and interest-bearing
+    securities/debt ratios against AAOIFI thresholds, a bulk screening list (max 100 tickers per
+    request), dividend purification amounts per share, and related securities. Authenticated with a
+    per-client clientId plus a Base64(SHA-512(secretKey + time + body)) token header. An outbound
+    webhook delivers compliance-status changes to a client-supplied URL.
+  humanURL: https://api.musaffa.com/
+  baseURL: https://platform.musaffa.com/b2b/api
+  tags:
+  - Shariah Compliance
+  - Stock Screening
+  - Islamic Finance
+  - ETFs
+  - Webhooks
+  properties:
+  - type: Documentation
+    url: https://api.musaffa.com/
+  - type: APIReference
+    url: https://api.musaffa.com/
+  - type: Webhooks
+    url: https://api.musaffa.com/#webhook
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/musaffa-domain-security.yml
 - type: Website
-  url: https://www.hiive.com/securities/musaffa-stock
+  url: https://musaffa.com/
+- type: DeveloperPortal
+  url: https://musaffa.com/for-business/
+- type: Documentation
+  url: https://api.musaffa.com/
+- type: APIReference
+  url: https://api.musaffa.com/
+- type: Pricing
+  url: https://musaffa.com/for-business/
+- type: SignUp
+  url: https://musaffa.com/authentication/register/
+- type: Login
+  url: https://musaffa.com/authentication/login/
+- type: TermsOfService
+  url: https://musaffa.com/terms-of-use/
+- type: PrivacyPolicy
+  url: https://musaffa.com/privacy-policy/
+- type: Support
+  url: https://musaffa.com/contact-us/
+- type: Blog
+  url: https://musaffa.com/news/
+- type: Authentication
+  url: authentication/musaffa-authentication.yml
+- type: RateLimits
+  url: rate-limits/musaffa-rate-limits.yml
+- type: Plans
+  url: plans/musaffa-plans-pricing.yml
+- type: ErrorCatalog
+  url: errors/musaffa-problem-types.yml
+- type: Conventions
+  url: conventions/musaffa-conventions.yml
+- type: Conformance
+  url: conformance/musaffa-conformance.yml
+- type: Lifecycle
+  url: lifecycle/musaffa-lifecycle.yml
+- type: Webhooks
+  url: asyncapi/musaffa-screening-webhooks.yml
+- type: DataModel
+  url: data-model/musaffa-data-model.yml
+- type: Packages
+  url: packages/musaffa-packages.yml
+- type: LLMsTxt
+  url: llms/musaffa-llms.txt
+x-enrichment:
+  date: '2026-08-26'
+  status: enriched
+  artifacts_added: 14
+  pass: local-v1

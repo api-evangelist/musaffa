@@ -1,0 +1,41 @@
+generated: '2026-08-26'
+method: searched
+source: https://api.musaffa.com/
+docs: https://api.musaffa.com/
+limit_count: 3
+exhaustion_status: 429
+response_headers:
+  documented: false
+  note: >-
+    Musaffa documents the numeric limits and the 429 status but publishes NO rate-limit response
+    headers — no X-RateLimit-*, no RateLimit-*, no Retry-After. An agent cannot read remaining quota
+    or a reset time from a response; it can only observe the 429. This is the single largest
+    runtime-signal gap in the API.
+rate_limits:
+- scope: per-account
+  window: month
+  limit: 10000
+  unit: requests
+  tier: Starter
+  source: https://musaffa.com/for-business/
+- scope: per-account
+  window: month
+  limit: 100000
+  unit: requests
+  tier: Pro
+  source: https://api.musaffa.com/
+  note: >-
+    The API reference states "up to 100 000 API calls per month" as the plan-dependent ceiling; the
+    for-business page attributes 100,000/month to the Pro package and "unlimited" to Premium.
+- scope: per-key
+  window: second
+  limit: 1
+  unit: requests
+  burst: null
+  source: https://api.musaffa.com/
+  note: 1 API call per second, documented in the Rate Limits section of the API reference.
+request_size_limits:
+- operation: POST /b2b/api/v2/musaffa/stocks/screening-list
+  limit: 100
+  unit: tickers per request
+  source: https://api.musaffa.com/

@@ -1,0 +1,63 @@
+generated: '2026-08-26'
+method: searched
+source: https://api.musaffa.com/
+docs: https://api.musaffa.com/
+versioning:
+  style: uri-path
+  pattern: /b2b/api/v{n}/musaffa/{resource}
+  current_docs_version: v3.0
+  current_docs_last_updated: '2023-06-09'
+  published_doc_sets:
+  - {version: v1.0, url: 'https://api.musaffa.com/v1/', last_updated: '2022-04-27', status: 200}
+  - {version: v2.0, url: 'https://api.musaffa.com/v2/', last_updated: '2022-09-01', status: 200}
+  - {version: v3.0, url: 'https://api.musaffa.com/v3/', last_updated: '2023-06-09', status: 200, current: true}
+  note: >-
+    All three doc sets remain published and reachable, and the CURRENT (v3) reference still routes
+    live traffic to v1 and v2 paths — stocks/list is v1, screening-list and dividends/pure are v2,
+    only stocks/report is v3. Version numbers move per operation, not per API.
+deprecation_policy:
+  published: false
+  sunset_header: false
+  deprecation_header: false
+  note: >-
+    No deprecation policy, no sunset dates, no RFC 8594 Deprecation/Sunset headers, and no statement
+    of how long v1 and v2 endpoints will be honoured. No Deprecation pointer is emitted.
+deprecated_operations: []
+announced_but_unshipped:
+- feature: List of covered stocks
+  status: "Coming soon"
+  first_seen_in_docs: v3.0 (2023-06-09)
+  note: Still labelled "Coming soon" as of the 2026-08-26 fetch, three years after the doc date.
+- feature: ETF Screening Reports
+  status: "Coming soon"
+  first_seen_in_docs: v3.0 (2023-06-09)
+  note: >-
+    Marketing at https://musaffa.com/for-business/ sells "ETF coverage across global markets" and a
+    dedicated ETFs package tab, while the API reference still lists ETF screening as Coming soon.
+- feature: List of ETFs
+  status: "Coming soon"
+  first_seen_in_docs: v3.0 (2023-06-09)
+status_page:
+  published: false
+  probed:
+  - {url: 'https://status.musaffa.com/', result: 'no DNS/connection (curl exit, no HTTP status)'}
+  note: No status page found. No StatusPage pointer is emitted.
+sla:
+  published: false
+  note: No uptime or latency SLA is published; SLAs are presumably negotiated in the B2B contract.
+changelog:
+  published: false
+  note: >-
+    No dated changelog exists. The only change signal is the "Last updated" line on each versioned
+    doc set, captured above. No ChangeLog pointer is emitted.
+support:
+  email: info@musaffa.com
+  contact_url: https://musaffa.com/contact-us/
+  phone: "+1 (646) 881-5491"
+maturity_signal:
+  api_reference_age_days_at_probe: 1174
+  note: >-
+    The current API reference has not been updated since 2023-06-09 while the consumer product and
+    marketing site have shipped continuously (managed portfolios, new screeners, an SEC-registered
+    advisory arm). The B2B contract documentation is the least-maintained public surface Musaffa
+    operates.

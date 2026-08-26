@@ -1,0 +1,119 @@
+generated: '2026-08-26'
+method: searched
+source: https://api.musaffa.com/
+docs: https://api.musaffa.com/
+summary: >-
+  Cross-cutting runtime semantics for the Musaffa B2B Shariah Compliance API, read from the published
+  API reference at api.musaffa.com (v1/v2/v3). The API is read-only: every operation is a screening
+  lookup. Nothing in the surface creates, mutates or deletes provider-side state.
+auth:
+  style: custom-signature
+  detail: clientId header + Base64(SHA-512(secretKey + time + body)) token header + time header
+  cross_ref: authentication/musaffa-authentication.yml
+transport:
+  protocol: REST over HTTPS
+  request_encoding: application/json
+  response_encoding: application/json
+  verbs_used: [POST, GET]
+  note: >-
+    The introduction claims the API "accepts form-encoded request bodies", but every documented
+    operation sends JSON with Content-Type application/json and a 406 is returned for non-JSON. The
+    prose is stale; JSON is what the examples do.
+base_url:
+  stated_prefix: https://platform.musaffa.com/api
+  actual_examples_prefix: https://platform.musaffa.com/b2b/api
+  note: >-
+    The Introduction says all requests begin at https://platform.musaffa.com/api while every curl,
+    Java and Python example calls https://platform.musaffa.com/b2b/api/v{n}/musaffa/... The example
+    paths are treated as authoritative here.
+versioning:
+  style: uri-path
+  pattern: /b2b/api/v{n}/musaffa/{resource}
+  versions_live: [v1, v2, v3]
+  note: >-
+    Versioning is PER OPERATION, not per API. The v3 documentation set mixes v1, v2 and v3 paths in
+    the same reference — stocks/list is v1, screening-list and dividends/pure are v2, stocks/report
+    is v3. There is no single versioned base a client can pin.
+  docs_versions:
+    v1: {url: 'https://api.musaffa.com/v1/', last_updated: '2022-04-27'}
+    v2: {url: 'https://api.musaffa.com/v2/', last_updated: '2022-09-01'}
+    v3: {url: 'https://api.musaffa.com/v3/', last_updated: '2023-06-09', current: true}
+pagination:
+  supported: false
+  note: >-
+    No pagination is documented on any collection response. POST /stocks/list returns an unbounded
+    JSON array for a country+sector query with no limit, offset, cursor or page parameter. The only
+    published size control anywhere is the 100-ticker cap on the bulk screening-list request body.
+filtering:
+  supported: true
+  params:
+  - {operation: 'POST /b2b/api/v1/musaffa/stocks/list', field: country, example: US}
+  - {operation: 'POST /b2b/api/v1/musaffa/stocks/list', field: sector, example: Information Technology}
+  sectors:
+  - Health Care
+  - Financials
+  - Information Technology
+  - Consumer Staples
+  - Real Estate
+  - Energy
+  - Industrials
+  - Materials
+  - Utilities
+  - Consumer Discretionary
+  - Communication Services
+field_expansion:
+  supported: false
+  note: >-
+    Not parameterised, but there ARE two response depths: the bulk screening-list returns summary
+    ratio objects while POST /v3/.../stocks/report returns the full report including
+    revenueBreakdownDetail, interestBearingSecuritiesAndAssetsDetail, interestIncomeDetail and
+    interestBearingDebtDetail line items. Depth is chosen by picking an endpoint, not a parameter.
+metadata:
+  supported: false
+request_id:
+  supported: false
+  note: No correlation/request-id header is documented in either direction.
+idempotency:
+  supported: na
+  reason: read-only-api
+  note: >-
+    No idempotency key is documented and none is needed — every operation is a read. Repeating any
+    request produces no provider-side effect. Recorded as `na` rather than absent so the API is not
+    scored as omitting a control it has no surface for.
+error_envelope:
+  documented: false
+  status_table: true
+  cross_ref: errors/musaffa-problem-types.yml
+rate_limit_signaling:
+  headers: none
+  exhaustion_status: 429
+  cross_ref: rate-limits/musaffa-rate-limits.yml
+  note: >-
+    Limits are documented in prose only. No response header carries remaining quota, limit or reset,
+    and no Retry-After is documented on 429.
+dry_run_mode:
+  supported: na
+  reason: read-only-api
+reversibility:
+  applicable: false
+  state: na
+  reason: read-only-api
+  grade: na
+  detail: >-
+    The Musaffa B2B API publishes no write surface. All five documented operations — stocks/list,
+    stocks/report, stocks/screening-list, stocks/dividends/pure and stocks/related/{symbol} — are
+    screening reads that return data and change nothing on Musaffa's side. There is consequently no
+    action for an agent to reverse: no cancel, refund, void, undo, rollback or restore operation
+    exists or is needed. The only outbound state change in the surface is Musaffa POSTing a
+    compliance-status update to a client-supplied webhook URL, which is a notification to the
+    client's own system and is reversible only there.
+  write_operations: []
+  reversal_operations: []
+  source: https://api.musaffa.com/
+webhooks:
+  supported: true
+  direction: outbound
+  cross_ref: asyncapi/musaffa-screening-webhooks.yml
+sandbox:
+  published: false
+  note: No test mode, sandbox host, test credentials or fixture tickers are documented.

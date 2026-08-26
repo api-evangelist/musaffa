@@ -1,0 +1,123 @@
+generated: '2026-08-26'
+method: derived
+source: https://api.musaffa.com/
+derived_from: >-
+  The request/response field tables published in the Musaffa B2B API reference (v3.0). Musaffa
+  publishes no OpenAPI or JSON Schema, so this graph is derived from the documented field tables and
+  the worked example payloads only — no field, type or relationship here is invented.
+entity_count: 7
+entities:
+- name: Stock
+  description: A covered equity security, keyed by ticker symbol.
+  key: stockName
+  key_alias: symbol
+  key_note: >-
+    The identifier field is named `stockName` in the list, bulk and related responses but `symbol` in
+    the single-report response. Same concept, two names, in one document.
+  identifier_format: >-
+    Ticker, optionally suffixed with an exchange code (AAPL, DCII.JK, SSNNF, API.L). No separate
+    exchange/MIC field is returned, so market must be inferred from the suffix.
+  fields:
+  - {name: stockName, type: string}
+  - {name: companyName, type: string}
+  - {name: status, type: string, note: list endpoint only}
+  - {name: ranking, type: number, note: list endpoint only}
+- name: ScreeningReport
+  description: >-
+    The full AAOIFI screening result for one security — the richest object in the API, returned by
+    POST /b2b/api/v3/musaffa/stocks/report.
+  key: symbol
+  fields:
+  - {name: companyName, type: string}
+  - {name: symbol, type: string}
+  - {name: lastUpdate, type: string, format: ISO 8601}
+  - {name: shariahComplianceStatus, type: string, enum: [COMPLIANT, NON_COMPLIANT, QUESTIONABLE, NOT_COVERED]}
+  - {name: complianceRanking, type: number, range: 0-5}
+  - {name: reportDate, type: date, format: ISO 8601}
+  - {name: reportSource, type: string, format: url, note: link to the company filing the screen was computed from}
+  - {name: totalRevenue, type: number}
+  - {name: trailing36monAvrCap, type: number}
+  - {name: totalAssets, type: number}
+  - {name: accountsReceivable, type: number}
+  - {name: reportedYear, type: number}
+  - {name: reportedQuarter, type: string, enum: [FIRST_QUARTER, SECOND_QUARTER, THIRD_QUARTER, ANNUAL]}
+  - {name: mainCurrency, type: string}
+  - {name: units, type: number, note: numeric scale of the amounts, e.g. millions}
+- name: RevenueBreakdown
+  description: The AAOIFI non-permissible-revenue screen (5% threshold).
+  fields:
+  - {name: halalRatio, type: number, unit: percent}
+  - {name: notHalalRatio, type: number, unit: percent}
+  - {name: doubtfulRatio, type: number, unit: percent}
+  - {name: halalRevenue, type: number}
+  - {name: notHalalRevenue, type: number}
+  - {name: doubtfulRevenue, type: number}
+  - {name: status, type: string, enum: [Pass, Fail, NOT_UNDER_COVERAGE]}
+- name: InterestBearingSecuritiesAndAssets
+  description: The AAOIFI interest-bearing securities screen (30% of trailing 36-month average market cap).
+  fields:
+  - {name: interestRatio, type: number, unit: percent}
+  - {name: status, type: string, enum: [Pass, Fail, NOT_COVERED]}
+  - {name: totalAmount, type: number, note: detail form}
+  - {name: totalRetio, type: number, note: 'detail form; misspelling is Musaffa''s, preserved verbatim'}
+  - {name: totalNonIslamicAmount, type: number, note: detail form}
+  - {name: longTermJson, type: object, note: detail form}
+  - {name: shortTermJson, type: object, note: detail form}
+- name: InterestBearingDebt
+  description: The AAOIFI interest-bearing debt screen (30% of trailing 36-month average market cap).
+  fields:
+  - {name: debtRatio, type: number, unit: percent}
+  - {name: status, type: string, enum: [Pass, Fail, NOT_COVERED]}
+  - {name: totalAmount, type: number, note: detail form}
+  - {name: totalRetio, type: number, note: detail form}
+  - {name: longTermJson, type: object, note: detail form}
+  - {name: shortTermJson, type: object, note: detail form}
+- name: RevenueLineItem
+  description: >-
+    A recursive revenue line item inside revenueBreakdownDetail / interestIncomeDetail — carries an
+    `items` array of the same shape, so the revenue tree is arbitrarily deep.
+  fields:
+  - {name: name, type: string}
+  - {name: amount, type: number}
+  - {name: amountInOnes, type: number}
+  - {name: percentage, type: number}
+  - {name: halalAmount, type: number}
+  - {name: halalAmountInOnes, type: number}
+  - {name: halalPercentage, type: number}
+  - {name: notHalalAmount, type: number}
+  - {name: notHalalAmountInOnes, type: number}
+  - {name: notHalalPercentage, type: number}
+  - {name: questionableAmount, type: number}
+  - {name: questionableAmountInOnes, type: number}
+  - {name: questionablePercentage, type: number}
+  - {name: items, type: array, note: 'nested RevenueLineItem[]'}
+- name: DividendPurification
+  description: Per-share purification amount for a security's latest dividend.
+  key: stock
+  fields:
+  - {name: non-compliant_revenue_ratio, type: number, unit: percent}
+  - {name: dividend_per_share_for_quarter, type: number}
+  - {name: dividend_purification_amount_per_share, type: number}
+  formula: >-
+    Dividend purification amount per share = Last Dividend per Share * (IR + QR) / 100, where IR is
+    the impermissible revenue ratio and QR the questionable revenue ratio.
+  note: >-
+    This is the only entity in the API using snake_case field names; every other object is camelCase.
+relationships:
+- {from: ScreeningReport, to: Stock, type: belongs_to, via: symbol}
+- {from: ScreeningReport, to: RevenueBreakdown, type: has_one, via: revenueBreakdown}
+- {from: ScreeningReport, to: InterestBearingSecuritiesAndAssets, type: has_one, via: interestBearingSecuritiesAndAssets}
+- {from: ScreeningReport, to: InterestBearingDebt, type: has_one, via: interestBearingDebt}
+- {from: ScreeningReport, to: RevenueLineItem, type: has_many, via: revenueBreakdownDetail}
+- {from: ScreeningReport, to: RevenueLineItem, type: has_many, via: interestIncomeDetail}
+- {from: RevenueLineItem, to: RevenueLineItem, type: has_many, via: items}
+- {from: DividendPurification, to: Stock, type: belongs_to, via: stock}
+- {from: Stock, to: Stock, type: has_many, via: 'GET /stocks/related/{symbol}', note: peers by market, industry and sector}
+- {from: WebhookEvent, to: ScreeningReport, type: mirrors, via: 'summary form of the screening report', note: 'see asyncapi/musaffa-screening-webhooks.yml'}
+identifier_prefixes:
+  published: false
+  note: No opaque object ids exist — every entity is keyed by exchange ticker.
+gaps:
+- No ETF entity is returned by any live operation; ETF screening is documented as "Coming soon".
+- No exchange/market entity, despite market being the unit the packages are sold in.
+- Currency is a bare string (mainCurrency) with no documented enum.

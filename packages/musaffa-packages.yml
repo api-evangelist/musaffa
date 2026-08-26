@@ -1,0 +1,32 @@
+generated: '2026-08-26'
+method: searched
+source: >-
+  Registry searches run 2026-08-26 against npm, PyPI, RubyGems, crates.io and the GitHub search API,
+  plus the Musaffa API reference (https://api.musaffa.com/) and https://musaffa.com/for-business/.
+package_count: 0
+official_sdk_count: 0
+packages: []
+summary: >-
+  Musaffa ships no client library in any language. The API reference offers copy-paste request
+  samples in shell (curl), Java (Spring RestTemplate) and Python (requests) — hand-rolled HTTP with
+  the SHA-512 token computed inline — and that is the whole integration story. Because the auth
+  scheme is a per-request signature over the exact serialized body, every consumer has to reimplement
+  the same digest, which is precisely the work an SDK would remove. No SDKs pointer is emitted.
+registries_searched:
+- {registry: npm, query: musaffa, endpoint: 'https://registry.npmjs.org/-/v1/search?text=musaffa', results: 0}
+- {registry: pypi, query: musaffa, endpoint: 'https://pypi.org/pypi/musaffa/json', status: 404}
+- {registry: pypi, query: musaffa-api, endpoint: 'https://pypi.org/pypi/musaffa-api/json', status: 404}
+- {registry: rubygems, query: musaffa, endpoint: 'https://rubygems.org/api/v1/gems/musaffa.json', status: 404}
+- {registry: crates.io, query: musaffa, endpoint: 'https://crates.io/api/v1/crates?q=musaffa', results: 0}
+- {registry: github, query: 'orgs/musaffa', endpoint: 'https://api.github.com/orgs/musaffa', status: 404}
+github:
+  organization: null
+  note: >-
+    There is no github.com/musaffa organization. The github.com/musaffa USER account belongs to an
+    unrelated Ruby developer (file_validators, polymorphic_constraints) and is NOT the company. The
+    only Musaffa-named repositories in GitHub search are third-party or personal projects. No
+    GitHubOrganization pointer is emitted.
+code_samples_published:
+  languages: [shell, java, python]
+  location: https://api.musaffa.com/
+  note: In-page tabbed samples in the Slate docs, not distributable packages.
