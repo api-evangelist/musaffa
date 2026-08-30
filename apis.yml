@@ -58,6 +58,12 @@ apis:
   - Stock Screening
   - Islamic Finance
   - ETFs
+  - Webhook
+  tags_raw:
+  - Shariah Compliance
+  - Stock Screening
+  - Islamic Finance
+  - ETFs
   - Webhooks
   properties:
   - type: Documentation
