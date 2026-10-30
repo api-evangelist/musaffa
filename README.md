@@ -64,5 +64,118 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Musaffa is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://www.hiive.com/securities/musaffa-stock
+Musaffa is a New York-headquartered Islamic fintech that operates a halal investing platform and sells its underlying Shariah-compliance dataset to other businesses as the Musaffa B2B API. The company screens 120,000+ stocks and ETFs across 70+ global exchanges against an AAOIFI-based methodology and exposes the results — compliance status, a 0-5 compliance ranking, revenue breakdown, interest-bearing securities and debt ratios, dividend purification amounts and related securities — through a versioned REST API at platform.musaffa.com, plus an outbound webhook that pushes compliance-status changes to a subscriber URL. The B2B API is documented publicly at api.musaffa.com (v1, v2 and the current v3) but the API itself is sold through a demo/sales process: credentials are a client ID plus a shared secret issued per client, and there is no self-service signup for the API.
+
+**Areas:** Islamic Finance · Shariah Compliance · Halal Investing · Stock Screening · Financial Data · ETFs · Market Data · Fintech · Investing · Compliance · Zakat · Company
+
+## Musaffa on APIs.io
+
+Everything profiled for Musaffa is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/musaffa/](https://apis.io/providers/musaffa/)** — or go straight to one of the APIs or properties below.
+
+### APIs (1)
+
+- [Musaffa B2B Shariah Compliance API](https://apis.io/apis/musaffa/musaffa-b2b-shariah-compliance-api/) — REST API returning Shariah-compliance screening for stocks and ETFs — a compliance status and 0-5 ranking per ticker, a full screening report with revenue…
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Musaffa Screening Webhooks](https://apis.io/asyncapis/musaffa/musaffa-screening-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [musaffa-mcp.yml](https://apis.io/servers/musaffa/musaffa-mcp-yml/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Musaffa Authentication](https://apis.io/security/musaffa/musaffa-authentication/)
+- [Musaffa Domain Security](https://apis.io/security/musaffa/musaffa-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Musaffa Plans Pricing](https://apis.io/plans/musaffa/musaffa-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Musaffa Rate Limits](https://apis.io/rate-limits/musaffa/musaffa-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://musaffa.com/)
+- [Documentation](https://api.musaffa.com/)
+- [API reference](https://api.musaffa.com/)
+- [Pricing](https://musaffa.com/for-business/)
+- [Sign up](https://musaffa.com/authentication/register/)
+- [Support](https://musaffa.com/contact-us/)
+- [Blog](https://musaffa.com/news/)
+- [Terms of service](https://musaffa.com/terms-of-use/)
+- [Privacy policy](https://musaffa.com/privacy-policy/)
+
+## API Evangelist rating
+
+**Kin Score 44.8** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 39.0 |
+| Contract governance | 18.2 |
+| Operational transparency | 31.6 |
+| Developer ergonomics | 28.6 |
+| Access clarity | 76.3 |
+
+**Agent readiness 25.2** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | yes |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | na |
+
+**Regulatory alignment 28.7** — Securities & Market Data
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/musaffa/](https://apis.io/providers/musaffa/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Musaffa: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/musaffa/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
